@@ -43,10 +43,12 @@ module.exports = (sequelize, DataTypes) => {
         E_Rac_totalKVarh:DataTypes.FLOAT,
         WarmCode:DataTypes.FLOAT,
         */
-        distanceCm:DataTypes.FLOAT,
-        distanceInch:DataTypes.FLOAT,
-        distanceMm:DataTypes.FLOAT,
-        distanceFt:DataTypes.FLOAT
+        Vpv1_V:DataTypes.FLOAT,
+        Ipv1_A:DataTypes.FLOAT,
+        Ppv1_W:DataTypes.FLOAT,
+        Pac_W:DataTypes.FLOAT,
+        Epv1_today_kWh:DataTypes.FLOAT,
+        Epv1_total_kWh:DataTypes.FLOAT
     })
 
     return Log
