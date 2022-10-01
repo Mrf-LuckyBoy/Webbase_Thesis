@@ -16,7 +16,7 @@
       </div>
       <div class="D">
         <h3>Diff chart</h3>
-        <apexchart height="400" type="line" :options="chartOptions" :series="series"></apexchart>
+        <apexchart height="400" type="area" :options="chartOptions" :series="series"></apexchart>
       </div>
     </div>
     <div class="container1">
@@ -27,6 +27,41 @@
       <div class="F">
         <h3>Epv1_today_kWh</h3>
         <apexchart height="250" type="line" :options="chartOptionsTd" :series="seriesTd"></apexchart>
+      </div>
+    </div>
+    <br><br><br><br>
+    <div class="container2">
+      <div class="G">
+        <h1>Epv1_today_kWh</h1>
+        <h1>{{arrG[arrG.length-1]}}</h1>
+      </div>
+      <div class="H">
+        <h1>Epv1_total_kWh</h1>
+        <h1>{{arrH[arrH.length-1]}}</h1>
+      </div>
+      <div class="I">
+        <h1>PacThisMonthTotal</h1>
+        <h1>{{PacThisMonthTotal}}</h1>
+      </div>
+      <div class="J">
+        <h1>PacLastMonthTotal</h1>
+        <h1>{{PacLastMonthTotal}}</h1>
+      </div>
+      <div class="K">
+        <h1>PacDiffMonthTotal</h1>
+        <h1>{{PacDiffMonthTotal}}</h1>
+      </div>
+      <div class="L">
+        <h1>PacTodayTotal</h1>
+        <h1>{{PacTodayTotal}}</h1>
+      </div>
+      <div class="M">
+        <h1>PacYesterdayTotal</h1>
+        <h1>{{PacYesterdayTotal}}</h1>
+      </div>
+      <div class="N">
+        <h1>PacDiffTodayTotal</h1>
+        <h1>{{PacDiffTodayTotal}}</h1>
       </div>
     </div>
   </div>
@@ -104,7 +139,7 @@ export default {
           data: []
         },
       ],
-      seriesIpv1: [
+      seriesPpv1: [
         {
           name: "Ppv1_A",
           data: []
@@ -128,19 +163,56 @@ export default {
       arrD: [],
       arrE: [],
       arrF: [],
-      arrG: []
+      arrG: [],
+      arrH: [],
+      PacThisMonthTotal: 0,
+      PacLastMonthTotal: 0,
+      PacDiffMonthTotal: 0,
+      PacTodayTotal: 0,
+      PacYesterdayTotal: 0,
+      PacDiffTodayTotal: 0,
     }
   },
   async created() {
+    const d = new Date();
     this.logs = (await LogService.index()).data
     for (let i = 0; i < this.logs.length; i++) {
-      this.arrA.push(this.logs[i].createdAt);
+      this.arrA.push(this.logs[i].updatedAt);
       this.arrB.push(this.logs[i].Vpv1_V);
       this.arrC.push(this.logs[i].Ipv1_A);
       this.arrD.push(this.logs[i].Ppv1_W);
       this.arrE.push(this.logs[i].Pac_W);
       this.arrG.push(this.logs[i].Epv1_today_kWh);
+      this.arrH.push(this.logs[i].Epv1_total_kWh);
+      console.log(d.getFullYear().toString())
+      console.log(this.logs[i].updatedAt.slice(0, 4))
+      console.log(d.getFullYear().toString() == this.logs[i].updatedAt.slice(0, 4))
+      if (d.getFullYear().toString() == this.logs[i].updatedAt.slice(0, 4)) {
+        //sumPacThisMonth
+        if ((d.getMonth() + 1).toString() == this.logs[i].updatedAt.slice(5, 7) || "0"+(d.getMonth() + 1).toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacThisMonthTotal = this.PacThisMonthTotal + this.logs[i].Pac_W
+          //sumPacToday
+          if (d.getDate().toString() == this.logs[i].updatedAt.slice(8 , 10) || "0"+d.getDate().toString() == this.logs[i].updatedAt.slice(8 , 10)) {
+            this.PacTodayTotal = this.PacTodayTotal + this.logs[i].Pac_W
+          }
+          //sumPacYesterDay
+          if ((d.getDate()-1).toString() == this.logs[i].updatedAt.slice(8 , 10) || "0"+(d.getDate()-1).toString() == this.logs[i].updatedAt.slice(8 , 10)) {
+            this.PacYesterdayTotal = this.PacYesterdayTotal + this.logs[i].Pac_W
+          }
+        }
+        //sumPacLastMonth
+        if(d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0"+d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)){
+          this.PacLastMonthTotal =  this.PacLastMonthTotal + this.logs[i].Pac_W
+        }
+      }
     }
+    this.PacTodayTotal = Math.ceil(this.PacTodayTotal)
+    this.PacYesterdayTotal = Math.ceil(this.PacYesterdayTotal)
+    this.PacDiffTodayTotal = Math.ceil(this.PacTodayTotal - this.PacYesterdayTotal)
+    this.PacThisMonthTotal = Math.ceil(this.PacThisMonthTotal)
+    this.PacLastMonthTotal = Math.ceil(this.PacLastMonthTotal)
+    this.PacDiffMonthTotal = Math.ceil(this.PacThisMonthTotal - this.PacLastMonthTotal)
+
     this.series = [
       {
         name: "Vpv1_V",
@@ -252,10 +324,22 @@ div.container {
 div.container1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr;
   gap: 15px 15px;
   grid-template-areas:
     "e f";
+}
+
+div.container2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  gap: 15px 15px;
+  grid-template-areas:
+    "g h"
+    "i l"
+    "j m"
+    "k n";
 }
 
 div.A {
@@ -277,7 +361,40 @@ div.D {
 div.E {
   grid-area: e;
 }
-div.F{
+
+div.F {
   grid-area: f;
+}
+
+div.G {
+  grid-area: g;
+}
+
+div.H {
+  grid-area: h;
+}
+
+div.I {
+  grid-area: i;
+}
+
+div.J {
+  grid-area: j;
+}
+
+div.K {
+  grid-area: k;
+}
+
+div.L {
+  grid-area: l;
+}
+
+div.M {
+  grid-area: m;
+}
+
+div.N {
+  grid-area: n;
 }
 </style>
