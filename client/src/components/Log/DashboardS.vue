@@ -16,7 +16,7 @@
       </div>
       <div class="D">
         <h3>Diff chart</h3>
-        <apexchart height="400" type="area" :options="chartOptions" :series="series"></apexchart>
+        <apexchart type="line" height="350" :options="chartOptionsDiffC" :series="seriesDiffC"></apexchart>
       </div>
     </div>
     <div class="container1">
@@ -33,11 +33,11 @@
     <div class="container2">
       <div class="G">
         <h1>Epv1_today_kWh</h1>
-        <h1>{{arrG[arrG.length-1]}}</h1>
+        <h1>{{EpvTd[EpvTd.length-1]}}</h1>
       </div>
       <div class="H">
         <h1>Epv1_total_kWh</h1>
-        <h1>{{arrH[arrH.length-1]}}</h1>
+        <h1>{{EpvTt[EpvTt.length-1]}}</h1>
       </div>
       <div class="I">
         <h1>PacThisMonthTotal</h1>
@@ -50,6 +50,7 @@
       <div class="K">
         <h1>PacDiffMonthTotal</h1>
         <h1>{{PacDiffMonthTotal}}</h1>
+        <apexchart type="radialBar" :options="chartOptionsDiffM" :series="seriesDiffM"></apexchart>
       </div>
       <div class="L">
         <h1>PacTodayTotal</h1>
@@ -62,6 +63,7 @@
       <div class="N">
         <h1>PacDiffTodayTotal</h1>
         <h1>{{PacDiffTodayTotal}}</h1>
+        <apexchart type="radialBar" :options="chartOptionsDiffD" :series="seriesDiffD"></apexchart>
       </div>
     </div>
   </div>
@@ -74,12 +76,6 @@ export default {
   name: 'hello',
   data: function () {
     return {
-      chartOptions: {
-        xaxis: {
-          type: "datetime",
-          categories: []
-        }
-      },
       chartOptionsVpv1: {
         xaxis: {
           type: "datetime",
@@ -113,17 +109,139 @@ export default {
           categories: []
         }
       },
-      series: [
-        {
-          name: "Vpv1_V",
-          data: []
+      chartOptionsDiffM: {
+        plotOptions: {
+          radialBar: {
+            startAngle: -90,
+            endAngle: 90,
+            dataLabels: {
+              name: {
+                show: false
+              },
+              value: {
+                offsetY: -2,
+                fontSize: '22px'
+              }
+            }
+          }
         },
-        {
-          name: "Ipv1_A",
-          data: []
+      },
+      chartOptionsDiffD: {
+        plotOptions: {
+          radialBar: {
+            startAngle: -90,
+            endAngle: 90,
+            dataLabels: {
+              name: {
+                show: false
+              },
+              value: {
+                offsetY: -2,
+                fontSize: '22px'
+              }
+            }
+          }
         },
+        colors: ['#4cf5b1']
+      },
+      chartOptionsDiffC: {
+        chart: {
+          height: 350,
+          type: 'line',
+          stacked: false
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          width: [1, 1, 4]
+        },
+        xaxis: {
+          type: "datetime",
+          categories: [],
+        },
+        yaxis: [
+          {
+            axisTicks: {
+              show: true,
+            },
+            axisBorder: {
+              show: true,
+              color: '#008FFB'
+            },
+            labels: {
+              style: {
+                colors: '#008FFB',
+              }
+            },
+            title: {
+              text: "Vpv1_V",
+              style: {
+                color: '#008FFB',
+              }
+            },
+            tooltip: {
+              enabled: true
+            }
+          },
+          {
+            seriesName: 'Income',
+            opposite: true,
+            axisTicks: {
+              show: true,
+            },
+            axisBorder: {
+              show: true,
+              color: '#00E396'
+            },
+            labels: {
+              style: {
+                colors: '#00E396',
+              }
+            },
+            title: {
+              text: "Ipv1_A",
+              style: {
+                color: '#00E396',
+              }
+            },
+          },
+          {
+            seriesName: 'Revenue',
+            opposite: true,
+            axisTicks: {
+              show: true,
+            },
+            axisBorder: {
+              show: true,
+              color: '#FEB019'
+            },
+            labels: {
+              style: {
+                colors: '#FEB019',
+              },
+            },
+            title: {
+              text: "Ppv1_W",
+              style: {
+                color: '#FEB019',
+              }
+            }
+          },
+        ],
+      },
+      seriesDiffC: [
         {
-          name: "Ppv1_W",
+          name: 'Vpv1_V',
+          type: 'line',
+          data: []
+        }, {
+          name: 'Ipv1_A',
+          type: 'line',
+          data: []
+        }, {
+          name: 'Ppv1_W',
+          type: 'line',
           data: []
         }
       ],
@@ -157,54 +275,119 @@ export default {
           data: []
         },
       ],
-      arrA: [],
-      arrB: [],
-      arrC: [],
-      arrD: [],
-      arrE: [],
-      arrF: [],
-      arrG: [],
-      arrH: [],
+      seriesDiffM: [],
+      seriesDiffD: [],
+      ToDayDate: [],
+      ToDayVpv: [],
+      ToDayIpv: [],
+      ToDayPpv: [],
+      ToDayPac: [],
+      EpvTd: [],
+      EpvTt: [],
       PacThisMonthTotal: 0,
       PacLastMonthTotal: 0,
       PacDiffMonthTotal: 0,
       PacTodayTotal: 0,
       PacYesterdayTotal: 0,
       PacDiffTodayTotal: 0,
+      PacThisMonthTotalArr: [0, 0, 0, 0, 0, 0, 0],
+      PacLastMonthTotalArr: [0, 0, 0, 0, 0, 0, 0],
+      PacDiffMonthTotalArr: [0, 0, 0, 0, 0, 0, 0],
+      PacTodayTotalArr: [0, 0, 0, 0, 0, 0, 0],
+      PacYesterdayTotalArr: [0, 0, 0, 0, 0, 0, 0],
+      PacDiffTodayTotalArr: [0, 0, 0, 0, 0, 0, 0],
+      PacDateD: ["", "", "", "", "", "", ""],
+      PacDateM: ["", "", "", "", "", "", ""]
     }
   },
   async created() {
     const d = new Date();
+    const oneDAgo = new Date(); oneDAgo.setDate(oneDAgo.getDate() - 1)
+    const twoDAgo = new Date(); twoDAgo.setDate(twoDAgo.getDate() - 2)
+    const threeDAgo = new Date(); threeDAgo.setDate(threeDAgo.getDate() - 3)
+    const fourDAgo = new Date(); fourDAgo.setDate(fourDAgo.getDate() - 4)
+    const fiveDAgo = new Date(); fiveDAgo.setDate(fiveDAgo.getDate() - 5)
+    const sixDAgo = new Date(); sixDAgo.setDate(sixDAgo.getDate() - 6)
+    const sevenDAgo = new Date(); sevenDAgo.setDate(sevenDAgo.getDate() - 7)
+    const twoMAgo = new Date(); twoMAgo.setDate(twoMAgo.getMonth() - 1)
+    const threeMAgo = new Date(); threeMAgo.setDate(threeMAgo.getMonth() - 2)
+    const fourMAgo = new Date(); fourMAgo.setDate(fourMAgo.getMonth() - 3)
+    const fiveMAgo = new Date(); fiveMAgo.setDate(fiveMAgo.getMonth() - 4)
+    const sixMAgo = new Date(); sixMAgo.setDate(sixMAgo.getMonth() - 5)
     this.logs = (await LogService.index()).data
     for (let i = 0; i < this.logs.length; i++) {
-      this.arrA.push(this.logs[i].updatedAt);
-      this.arrB.push(this.logs[i].Vpv1_V);
-      this.arrC.push(this.logs[i].Ipv1_A);
-      this.arrD.push(this.logs[i].Ppv1_W);
-      this.arrE.push(this.logs[i].Pac_W);
-      this.arrG.push(this.logs[i].Epv1_today_kWh);
-      this.arrH.push(this.logs[i].Epv1_total_kWh);
-      console.log(d.getFullYear().toString())
-      console.log(this.logs[i].updatedAt.slice(0, 4))
-      console.log(d.getFullYear().toString() == this.logs[i].updatedAt.slice(0, 4))
+      this.EpvTt.push(this.logs[i].Epv1_total_kWh);
+      //this year
       if (d.getFullYear().toString() == this.logs[i].updatedAt.slice(0, 4)) {
         //sumPacThisMonth
-        if ((d.getMonth() + 1).toString() == this.logs[i].updatedAt.slice(5, 7) || "0"+(d.getMonth() + 1).toString() == this.logs[i].updatedAt.slice(5, 7)) {
+        if ((d.getMonth() + 1).toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + (d.getMonth() + 1).toString() == this.logs[i].updatedAt.slice(5, 7)) {
           this.PacThisMonthTotal = this.PacThisMonthTotal + this.logs[i].Pac_W
+          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 1] += this.logs[i].Pac_W
           //sumPacToday
-          if (d.getDate().toString() == this.logs[i].updatedAt.slice(8 , 10) || "0"+d.getDate().toString() == this.logs[i].updatedAt.slice(8 , 10)) {
+          if (d.getDate().toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + d.getDate().toString() == this.logs[i].updatedAt.slice(8, 10)) {
             this.PacTodayTotal = this.PacTodayTotal + this.logs[i].Pac_W
+            this.ToDayDate.push(this.logs[i].updatedAt);
+            this.ToDayVpv.push(this.logs[i].Vpv1_V);
+            this.ToDayIpv.push(this.logs[i].Ipv1_A);
+            this.ToDayPpv.push(this.logs[i].Ppv1_W);
+            this.ToDayPac.push(this.logs[i].Pac_W);
+            this.EpvTd.push(this.logs[i].Epv1_today_kWh);
+            this.PacDate[this.PacDate.length - 1] = this.logs[i].updatedAt.slice(0, 10)
+            this.PacTodayTotalArr[this.PacTodayTotalArr.length - 1] += this.logs[i].Pac_W
           }
           //sumPacYesterDay
-          if ((d.getDate()-1).toString() == this.logs[i].updatedAt.slice(8 , 10) || "0"+(d.getDate()-1).toString() == this.logs[i].updatedAt.slice(8 , 10)) {
+          if ((oneDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 1).toString() == this.logs[i].updatedAt.slice(8, 10)) {
             this.PacYesterdayTotal = this.PacYesterdayTotal + this.logs[i].Pac_W
+            this.PacTodayTotalArr[this.PacTodayTotalArr.length - 2] += this.logs[i].Pac_W
+            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 1] += this.logs[i].Pac_W
+          }
+          if ((twoDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 2).toString() == this.logs[i].updatedAt.slice(8, 10)) {
+            this.PacTodayTotalArr[this.PacTodayTotalArr.length - 3] += this.logs[i].Pac_W
+            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 2] += this.logs[i].Pac_W
+          }
+          if ((threeDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 3).toString() == this.logs[i].updatedAt.slice(8, 10)) {
+            this.PacTodayTotalArr[this.PacTodayTotalArr.length - 4] += this.logs[i].Pac_W
+            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 3] += this.logs[i].Pac_W
+          }
+          if ((fourDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 4).toString() == this.logs[i].updatedAt.slice(8, 10)) {
+            this.PacTodayTotalArr[this.PacTodayTotalArr.length - 5] += this.logs[i].Pac_W
+            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 4] += this.logs[i].Pac_W
+          }
+          if ((fiveDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 5).toString() == this.logs[i].updatedAt.slice(8, 10)) {
+            this.PacTodayTotalArr[this.PacTodayTotalArr.length - 6] += this.logs[i].Pac_W
+            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 5] += this.logs[i].Pac_W
+          }
+          if ((sixDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 3).toString() == this.logs[i].updatedAt.slice(8, 10)) {
+            this.PacTodayTotalArr[this.PacTodayTotalArr.length - 7] += this.logs[i].Pac_W
+            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 6] += this.logs[i].Pac_W
+          }
+          if ((sevenDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 3).toString() == this.logs[i].updatedAt.slice(8, 10)) {
+            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 7] += this.logs[i].Pac_W
           }
         }
         //sumPacLastMonth
-        if(d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0"+d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)){
-          this.PacLastMonthTotal =  this.PacLastMonthTotal + this.logs[i].Pac_W
+        if (d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacLastMonthTotal = this.PacLastMonthTotal + this.logs[i].Pac_W
+          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 2] += this.logs[i].Pac_W
         }
+        if (twoMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 3] += this.logs[i].Pac_W
+        }
+        if (threeMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 4] += this.logs[i].Pac_W
+        }
+        if (fourMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 5] += this.logs[i].Pac_W
+        }
+        if (fiveMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 6] += this.logs[i].Pac_W
+        }
+        if (sixMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 7] += this.logs[i].Pac_W
+        }
+
       }
+
     }
     this.PacTodayTotal = Math.ceil(this.PacTodayTotal)
     this.PacYesterdayTotal = Math.ceil(this.PacYesterdayTotal)
@@ -212,56 +395,66 @@ export default {
     this.PacThisMonthTotal = Math.ceil(this.PacThisMonthTotal)
     this.PacLastMonthTotal = Math.ceil(this.PacLastMonthTotal)
     this.PacDiffMonthTotal = Math.ceil(this.PacThisMonthTotal - this.PacLastMonthTotal)
-
-    this.series = [
+    //console.log(this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 1])
+    console.log(this.logs[7].updatedAt.slice(0, 10))
+    console.log(this.PacTodayTotalArr)
+    console.log(this.PacYesterdayTotalArr)
+    console.log(this.PacLastMounthTotalArr)
+    this.seriesDiffC = [
       {
         name: "Vpv1_V",
-        data: this.arrB
+        data: this.ToDayVpv
       },
       {
         name: "Ipv1_A",
-        data: this.arrC
+        data: this.ToDayIpv
       },
       {
         name: "Ppv1_W",
-        data: this.arrD
+        data: this.ToDayPpv
       }
     ];
     this.seriesVpv1 = [
       {
         name: "Vpv1_V",
-        data: this.arrB
+        data: this.ToDayVpv
       },
     ];
     this.seriesIpv1 = [
       {
         name: "Ipv1_A",
-        data: this.arrC
+        data: this.ToDayIpv
       },
     ];
     this.seriesPpv1 = [
       {
         name: "Ppv1_A",
-        data: this.arrD
+        data: this.ToDayPpv
       },
     ];
     this.seriesPac = [
       {
         name: "Pac_W",
-        data: this.arrE
+        data: this.ToDayPac
       },
     ];
     this.seriesTd = [
       {
-        name: "Pac_W",
-        data: this.arrG
+        name: "Epv1_today_kWh",
+        data: this.EpvTd
       },
     ];
-    this.chartOptions = {
+    this.seriesDiffM = [
+      Math.ceil((this.PacDiffMonthTotal / this.PacThisMonthTotal) * 100)
+    ];
+    this.seriesDiffD = [
+      Math.ceil((this.PacDiffTodayTotal / this.PacTodayTotal) * 100)
+    ];
+    this.chartOptionsDiffC = {
       ...this.chartOptions,
       ...{
         xaxis: {
-          categories: this.arrA,
+          categories: this.ToDayDate,
         },
       },
     };
@@ -269,7 +462,7 @@ export default {
       ...this.chartOptions,
       ...{
         xaxis: {
-          categories: this.arrA,
+          categories: this.ToDayDate,
         },
       },
     };
@@ -277,7 +470,7 @@ export default {
       ...this.chartOptions,
       ...{
         xaxis: {
-          categories: this.arrA,
+          categories: this.ToDayDate,
         },
       },
     };
@@ -285,7 +478,7 @@ export default {
       ...this.chartOptions,
       ...{
         xaxis: {
-          categories: this.arrA,
+          categories: this.ToDayDate,
         },
       },
     };
@@ -293,7 +486,7 @@ export default {
       ...this.chartOptions,
       ...{
         xaxis: {
-          categories: this.arrA,
+          categories: this.ToDayDate,
         },
       },
     };
@@ -301,7 +494,7 @@ export default {
       ...this.chartOptions,
       ...{
         xaxis: {
-          categories: this.arrA,
+          categories: this.ToDayDate,
         },
       },
     };
