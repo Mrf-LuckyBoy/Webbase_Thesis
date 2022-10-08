@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="chart">
-      <apexchart type="bar" height="350" :options="chartOptions" :series="series"></apexchart>
+      <apexchart type="line" height="350" ref="chart" :options="chartOptions" :series="series"></apexchart>
     </div>
   </div>
 </template>
@@ -11,28 +11,79 @@ export default {
   name: 'hello123',
   data: function(){
     return{
-      
       series: [{
-            name: 'Net Profit',
-            data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-          }, {
-            name: 'Revenue',
-            data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-          }, {
-            name: 'Free Cash Flow',
-            data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+            data: data.slice()
           }],
           chartOptions: {
             chart: {
-              type: 'bar',
-              height: 350
+              id: 'realtime',
+              height: 350,
+              type: 'line',
+              animations: {
+                enabled: true,
+                easing: 'linear',
+                dynamicAnimation: {
+                  speed: 1000
+                }
+              },
+              toolbar: {
+                show: false
+              },
+              zoom: {
+                enabled: false
+              }
+            },
+            dataLabels: {
+              enabled: false
+            },
+            stroke: {
+              curve: 'smooth'
+            },
+            title: {
+              text: 'Dynamic Updating Chart',
+              align: 'left'
+            },
+            markers: {
+              size: 0
             },
             xaxis: {
-              categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+              type: 'datetime',
+              range: XAXISRANGE,
+            },
+            yaxis: {
+              max: 100
+            },
+            legend: {
+              show: false
             },
           },
+          
+          
     }
-  }
+  },
+  mounted: function () {
+          var me = this
+          window.setInterval(function () {
+            getNewSeries(lastDate, {
+              min: 10,
+              max: 90
+            })
+            
+            me.$refs.chart.updateSeries([{
+              data: data
+            }])
+          }, 1000)
+        
+          // every 60 seconds, we reset the data to prevent memory leaks
+          window.setInterval(function () {
+            resetData()
+            
+            me.$refs.chart.updateSeries([{
+              data
+            }], false, true)
+          }, 60000)
+        },
+
 }
 </script>
 <style scoped>
