@@ -1,52 +1,48 @@
 <template>
   <div>
-    <h1>Dashboard</h1>
-    <div class="container">
-      <div class="A">
-        <h3>Vpv1(V)</h3>
-        <apexchart height="400" type="line" :options="chartOptionsVpv1" :series="seriesVpv1"></apexchart>
+    <h1>หน้าติดตามการทำงานของอินเวอร์เตอร์</h1>
+    <div class="container2">
+      <div class="AA">
+        <h2>การผลิตไฟฟ้าในเดือนนี้เทียบกับเดือนที่แล้ว(W)</h2>
+        <h3>{{pacDiffTtM[1]}} Watt <br><br>คิดเป็นเปอร์เซ็นต์<br>({{Math.ceil(pacDiffTtM[0])}}) %</h3>
       </div>
-      <div class="B">
-        <h3>Ipv1(A)</h3>
-        <apexchart height="400" type="line" :options="chartOptionsIpv1" :series="seriesIpv1"></apexchart>
+      <div class="BB">
+        <h2>การผลิตไฟฟ้าวันนี้เทียบกับเมื่อวาน(W)</h2>
+        <h3>{{PacDiffTtD[1]}} Watt <br><br>คิดเป็นเปอร์เซ็นต์<br>({{Math.ceil(PacDiffTtD[0])}}) %</h3>
       </div>
-      <div class="C">
-        <h3>Ppv1(W)</h3>
-        <apexchart height="400" type="line" :options="chartOptionsPpv1" :series="seriesPpv1"></apexchart>
+      <div class="CC">
+        <h2>การผลิตไฟฟ้าสะสมในวันนี้(Kwh)</h2>
+        <h3>{{EpvTd[EpvTd.length-1]}} Kwh</h3>
       </div>
-      <div class="D">
-        <h3>Diff chart</h3>
-        <apexchart type="line" height="350" :options="chartOptionsDiffC" :series="seriesDiffC"></apexchart>
+      <div class="DD">
+        <h2>การผลิตไฟฟ้าสะสมทั้งหมด(Kwh)</h2>
+        <h3>{{EpvTt[EpvTt.length-1]}} Kwh</h3>
+      </div>
+    </div>
+    <div class="container11">
+      <div class="BarD">
+        <h2>เปรียบเทียบการผลิตไฟฟ้าในรายสัปดาร์</h2>
+        <apexchart type="bar" height="350" :options="chartOptionsBD" :series="seriesBD"></apexchart>
+      </div>
+      <div class="BarM">
+        <h2>เปรียบเทียบการผลิตไฟฟ้าเป็นรายเดือน</h2>
+        <apexchart type="bar" height="350" :options="chartOptionsBM" :series="seriesBM"></apexchart>
       </div>
     </div>
     <div class="container1">
       <div class="E">
-        <h3>Pac(W)</h3>
+        <h2>การผลิตไฟฟ้า(W)</h2>
         <apexchart height="250" type="line" :options="chartOptionsPac" :series="seriesPac"></apexchart>
       </div>
       <div class="F">
-        <h3>Epv1_today_kWh</h3>
+        <h2>การผลิตไฟฟ้าสะสมรายวัน(Kwh)</h2>
         <apexchart height="250" type="line" :options="chartOptionsTd" :series="seriesTd"></apexchart>
       </div>
     </div>
-    <br><br><br><br>
-    <div class="container11">
-      <div class="BarD">
-        <h1>Bar Chart Diff Day</h1>
-        <apexchart type="bar" height="350" :options="chartOptionsBD" :series="seriesBD"></apexchart>
-      </div>
-    </div>
-    <br><br><br><br>
-    <div class="container2">
-      <div class="AA">
-        <h1>PacDiffMonthTotal</h1>
-        <h1>{{PacDiffMonthTotal}}</h1>
-        <apexchart type="radialBar" :options="chartOptionsDiffM" :series="seriesDiffM"></apexchart>
-      </div>
-      <div class="BB">
-        <h1>PacDiffTodayTotal</h1>
-        <h1>{{PacDiffTodayTotal}}</h1>
-        <apexchart type="radialBar" :options="chartOptionsDiffD" :series="seriesDiffD"></apexchart>
+    <div class="container">
+      <div class="D">
+        <h2>การติดตามค่า</h2>
+        <apexchart type="line" height="350" :options="chartOptionsDiffC" :series="seriesDiffC"></apexchart>
       </div>
     </div>
   </div>
@@ -59,26 +55,7 @@ export default {
   name: 'hello',
   data: function () {
     return {
-      chartOptionsVpv1: {
-        xaxis: {
-          type: "datetime",
-          categories: []
-        }
-      },
-      chartOptionsIpv1: {
-        xaxis: {
-          type: "datetime",
-          categories: []
-        },
-        colors: ['#4cf5b1']
-      },
-      chartOptionsPpv1: {
-        xaxis: {
-          type: "datetime",
-          categories: []
-        },
-        colors: ['#f7a745']
-      },
+      
       chartOptionsPac: {
         xaxis: {
           type: "datetime",
@@ -92,41 +69,6 @@ export default {
           categories: []
         }
       },
-      chartOptionsDiffM: {
-        plotOptions: {
-          radialBar: {
-            startAngle: -90,
-            endAngle: 90,
-            dataLabels: {
-              name: {
-                show: false
-              },
-              value: {
-                offsetY: -2,
-                fontSize: '22px'
-              }
-            }
-          }
-        },
-      },
-      chartOptionsDiffD: {
-        plotOptions: {
-          radialBar: {
-            startAngle: -90,
-            endAngle: 90,
-            dataLabels: {
-              name: {
-                show: false
-              },
-              value: {
-                offsetY: -2,
-                fontSize: '22px'
-              }
-            }
-          }
-        },
-        colors: ['#4cf5b1']
-      },
       chartOptionsDiffC: {
         chart: {
           height: 350,
@@ -137,7 +79,7 @@ export default {
           enabled: false
         },
         stroke: {
-          width: [1, 1, 4]
+          width: [4, 4, 4]
         },
         xaxis: {
           type: "datetime",
@@ -158,7 +100,7 @@ export default {
               }
             },
             title: {
-              text: "Vpv1_V",
+              text: "แรงดังไฟฟ้า",
               style: {
                 color: '#008FFB',
               }
@@ -183,7 +125,7 @@ export default {
               }
             },
             title: {
-              text: "Ipv1_A",
+              text: "กระแสไฟฟ้า",
               style: {
                 color: '#00E396',
               }
@@ -205,7 +147,7 @@ export default {
               },
             },
             title: {
-              text: "Ppv1_W",
+              text: "กำลังไฟฟ้า",
               style: {
                 color: '#FEB019',
               }
@@ -219,9 +161,18 @@ export default {
           height: 350
         },
         xaxis: {
-          type: "datetime",
           categories: [],
         },
+      },
+      chartOptionsBM: {
+        chart: {
+          type: 'bar',
+          height: 350
+        },
+        xaxis: {
+          categories: [],
+        },
+        colors: ['#4cf5b1']
       },
       seriesDiffC: [
         {
@@ -237,24 +188,6 @@ export default {
           type: 'line',
           data: []
         }
-      ],
-      seriesVpv1: [
-        {
-          name: "Vpv1_V",
-          data: []
-        },
-      ],
-      seriesIpv1: [
-        {
-          name: "Ipv1_A",
-          data: []
-        },
-      ],
-      seriesPpv1: [
-        {
-          name: "Ppv1_A",
-          data: []
-        },
       ],
       seriesPac: [
         {
@@ -272,11 +205,11 @@ export default {
         {
           name: 'Today',
           data: []
-        }, {
-          name: 'YesterDay',
-          data: []
-        }, {
-          name: 'DiffDay',
+        }
+      ],
+      seriesBM: [
+        {
+          name: 'ThisMonth',
           data: []
         }
       ],
@@ -290,21 +223,17 @@ export default {
       ToDayPac: [],
       EpvTd: [],
       EpvTt: [],
-      PacThisMonthTotal: 0,
-      PacLastMonthTotal: 0,
-      PacDiffMonthTotal: 0,
-      PacTodayTotal: 0,
-      PacYesterdayTotal: 0,
-      PacDiffTodayTotal: 0,
+      //card
+      PacDiffTtD:[0 , 0],
+      pacDiffTtM:[0 , 0],
+      //barchart diff month
       PacThisMonthTotalArr: [0, 0, 0, 0, 0, 0, 0],
-      PacLastMonthTotalArr: [0, 0, 0, 0, 0, 0, 0],
-      PacDiffMonthTotalArr: [0, 0, 0, 0, 0, 0, 0],
       //barchart diff Day
       PacTodayTotalArr: [0, 0, 0, 0, 0, 0, 0],
-      PacYesterdayTotalArr: [0, 0, 0, 0, 0, 0, 0],
-      PacDiffTodayTotalArr: [0, 0, 0, 0, 0, 0, 0],
       PacDateD: ["", "", "", "", "", "", ""],
-      PacDateM: ["", "", "", "", "", "", ""]
+      PacDateM: ["", "", "", "", "", "", ""],
+      Gm:["January","February","March","April","May","June","July","August","September","October","November","December"],
+      Gd:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
     }
   },
   async created() {
@@ -316,143 +245,98 @@ export default {
     const fiveDAgo = new Date(); fiveDAgo.setDate(fiveDAgo.getDate() - 5)
     const sixDAgo = new Date(); sixDAgo.setDate(sixDAgo.getDate() - 6)
     const sevenDAgo = new Date(); sevenDAgo.setDate(sevenDAgo.getDate() - 7)
-    const twoMAgo = new Date(); twoMAgo.setDate(twoMAgo.getMonth() - 1)
-    const threeMAgo = new Date(); threeMAgo.setDate(threeMAgo.getMonth() - 2)
-    const fourMAgo = new Date(); fourMAgo.setDate(fourMAgo.getMonth() - 3)
-    const fiveMAgo = new Date(); fiveMAgo.setDate(fiveMAgo.getMonth() - 4)
-    const sixMAgo = new Date(); sixMAgo.setDate(sixMAgo.getMonth() - 5)
+
+    const twoMAgo = new Date(); twoMAgo.setMonth(twoMAgo.getMonth() - 1)
+    const threeMAgo = new Date(); threeMAgo.setMonth(threeMAgo.getMonth() - 2)
+    const fourMAgo = new Date(); fourMAgo.setMonth(fourMAgo.getMonth() - 3)
+    const fiveMAgo = new Date(); fiveMAgo.setMonth(fiveMAgo.getMonth() - 4)
+    const sixMAgo = new Date(); sixMAgo.setMonth(sixMAgo.getMonth() - 5)
     this.logs = (await LogService.index()).data
-    for (let i = 0; i < this.logs.length; i++) {
+      for (let i = 0; i < this.logs.length; i++) {
       this.EpvTt.push(this.logs[i].Epv1_total_kWh);
       //this year
       if (d.getFullYear().toString() == this.logs[i].updatedAt.slice(0, 4)) {
         //sumPacThisMonth
         if ((d.getMonth() + 1).toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + (d.getMonth() + 1).toString() == this.logs[i].updatedAt.slice(5, 7)) {
-          this.PacThisMonthTotal = this.PacThisMonthTotal + this.logs[i].Pac_W
-          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 1] += this.logs[i].Pac_W
+          this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 1] += Math.ceil(this.logs[i].Pac_W)
+          if(1<(parseInt(this.logs[i].updatedAt.slice(11,13)))<11){
           //sumPacToday
-          if (d.getDate().toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + d.getDate().toString() == this.logs[i].updatedAt.slice(8, 10)) {
-            this.PacTodayTotal = this.PacTodayTotal + this.logs[i].Pac_W
-            this.ToDayDate.push(this.logs[i].updatedAt);
+            if (d.getDate().toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + d.getDate().toString() == this.logs[i].updatedAt.slice(8, 10)) {
+            //this.ToDayDate.push(this.logs[this.logs.length-1].updatedAt.slice(0,11)+""+(parseInt(this.logs[this.logs.length-1].updatedAt.slice(11,13))+7)+""+this.logs[this.logs.length-1].updatedAt.slice(13,this.logs[this.logs.length-1].updatedAt.length));
+            this.ToDayDate.push(this.logs[i].updatedAt.slice(0,11)+(parseInt(this.logs[i].updatedAt.slice(11,13))+7)+this.logs[i].updatedAt.slice(13,this.logs[i].updatedAt.length))
             this.ToDayVpv.push(this.logs[i].Vpv1_V);
             this.ToDayIpv.push(this.logs[i].Ipv1_A);
             this.ToDayPpv.push(this.logs[i].Ppv1_W);
             this.ToDayPac.push(this.logs[i].Pac_W);
             this.EpvTd.push(this.logs[i].Epv1_today_kWh);
             this.PacTodayTotalArr[this.PacTodayTotalArr.length - 1] += Math.ceil(this.logs[i].Pac_W)
+            }
           }
           //sumPacYesterDay
           if ((oneDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 1).toString() == this.logs[i].updatedAt.slice(8, 10)) {
-            this.PacYesterdayTotal = this.PacYesterdayTotal + this.logs[i].Pac_W
             this.PacTodayTotalArr[this.PacTodayTotalArr.length - 2] += Math.ceil(this.logs[i].Pac_W)
-            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 1] += Math.ceil(this.logs[i].Pac_W)
           }
           if ((twoDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 2).toString() == this.logs[i].updatedAt.slice(8, 10)) {
             this.PacTodayTotalArr[this.PacTodayTotalArr.length - 3] += Math.ceil(this.logs[i].Pac_W)
-            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 2] += Math.ceil(this.logs[i].Pac_W)
           }
           if ((threeDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 3).toString() == this.logs[i].updatedAt.slice(8, 10)) {
             this.PacTodayTotalArr[this.PacTodayTotalArr.length - 4] += Math.ceil(this.logs[i].Pac_W)
-            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 3] += Math.ceil(this.logs[i].Pac_W)
           }
           if ((fourDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 4).toString() == this.logs[i].updatedAt.slice(8, 10)) {
             this.PacTodayTotalArr[this.PacTodayTotalArr.length - 5] += Math.ceil(this.logs[i].Pac_W)
-            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 4] += Math.ceil(this.logs[i].Pac_W)
           }
           if ((fiveDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 5).toString() == this.logs[i].updatedAt.slice(8, 10)) {
             this.PacTodayTotalArr[this.PacTodayTotalArr.length - 6] += Math.ceil(this.logs[i].Pac_W)
-            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 5] += Math.ceil(this.logs[i].Pac_W)
           }
-          if ((sixDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 3).toString() == this.logs[i].updatedAt.slice(8, 10)) {
+          if ((sixDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 6).toString() == this.logs[i].updatedAt.slice(8, 10)) {
             this.PacTodayTotalArr[this.PacTodayTotalArr.length - 7] += Math.ceil(this.logs[i].Pac_W)
-            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 6] += Math.ceil(this.logs[i].Pac_W)
-          }
-          if ((sevenDAgo.getDate()).toString() == this.logs[i].updatedAt.slice(8, 10) || "0" + (d.getDate() - 3).toString() == this.logs[i].updatedAt.slice(8, 10)) {
-            this.PacYesterdayTotalArr[this.PacYesterdayTotalArr.length - 7] += Math.ceil(this.logs[i].Pac_W)
           }
         }
         //sumPacLastMonth
         if (d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
-          this.PacLastMonthTotal = this.PacLastMonthTotal + this.logs[i].Pac_W
-          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 2] += this.logs[i].Pac_W
+          this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 2] += Math.ceil(this.logs[i].Pac_W)
         }
-        if (twoMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
-          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 3] += this.logs[i].Pac_W
+        if ((twoMAgo.getMonth()).toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + (twoMAgo.getMonth()).toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 3] += Math.ceil(this.logs[i].Pac_W)
         }
-        if (threeMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
-          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 4] += this.logs[i].Pac_W
+        if (threeMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + threeMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 4] += Math.ceil(this.logs[i].Pac_W)
         }
-        if (fourMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
-          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 5] += this.logs[i].Pac_W
+        if (fourMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + fourMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 5] += Math.ceil(this.logs[i].Pac_W)
         }
-        if (fiveMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
-          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 6] += this.logs[i].Pac_W
+        if (fiveMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + fiveMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 6] += Math.ceil(this.logs[i].Pac_W)
         }
-        if (sixMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + d.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7)) {
-          this.PacLastMonthTotalArr[this.PacLastMonthTotalArr.length - 7] += this.logs[i].Pac_W
+        if (sixMAgo.getMonth().toString() == this.logs[i].updatedAt.slice(5, 7) || "0" + (sixMAgo.getMonth()).toString() == this.logs[i].updatedAt.slice(5, 7)) {
+          this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 7] += Math.ceil(this.logs[i].Pac_W)
         }
 
       }
 
-    }
-
-    
-    for(let j = 0; j<this.PacDiffTodayTotalArr; j++){
-      this.PacDiffTodayTotalArr[j]=this.PacTodayTotalArr[j]-this.PacYesterdayTotalArr[j]
-      console.log("kuy")
-    }
-    this.PacDateD[this.PacDateD.length - 1] = d.getUTCFullYear().toString() + "-" + (d.getUTCMonth() + 1).toString() + "-" + d.getUTCDate().toString()+"T00:00:0"
-    this.PacDateD[this.PacDateD.length - 2] = oneDAgo.getUTCFullYear().toString() + "-" + (oneDAgo.getUTCMonth() + 1).toString() + "-" + oneDAgo.getUTCDate().toString()+"T00:00:0"
-    this.PacDateD[this.PacDateD.length - 3] = twoDAgo.getUTCFullYear().toString() + "-" + (twoDAgo.getUTCMonth() + 1).toString() + "-" + twoDAgo.getUTCDate().toString()+"T00:00:0"
-    this.PacDateD[this.PacDateD.length - 4] = threeDAgo.getUTCFullYear().toString() + "-" + (threeDAgo.getUTCMonth() + 1).toString() + "-" + threeDAgo.getUTCDate().toString()+"T00:00:0"
-    this.PacDateD[this.PacDateD.length - 5] = fourDAgo.getUTCFullYear().toString() + "-" + (fourDAgo.getUTCMonth() + 1).toString() + "-" + fourDAgo.getUTCDate().toString()+"T00:00:0"
-    this.PacDateD[this.PacDateD.length - 6] = fiveDAgo.getUTCFullYear().toString() + "-" + (fiveDAgo.getUTCMonth() + 1).toString() + "-" + fiveDAgo.getUTCDate().toString()+"T00:00:0"
-    this.PacDateD[this.PacDateD.length - 7] = sixDAgo.getUTCFullYear().toString() + "-" + (sixDAgo.getUTCMonth() + 1).toString() + "-" + sixDAgo.getUTCDate().toString()+"T00:00:0"
-    console.log(oneDAgo.getUTCFullYear().toString() + "-" + (oneDAgo.getUTCMonth() + 1).toString() + "-" + oneDAgo.getUTCDate().toString())
-    console.log(oneDAgo.getUTCFullYear().toString() + "-" + (oneDAgo.getUTCMonth() + 1).toString() + "-" + oneDAgo.getUTCDate().toString())
-    console.log(oneDAgo.getUTCFullYear().toString() + "-" + (oneDAgo.getUTCMonth() + 1).toString() + "-" + oneDAgo.getUTCDate().toString())
-    console.log(oneDAgo.getUTCFullYear().toString() + "-" + (oneDAgo.getUTCMonth() + 1).toString() + "-" + oneDAgo.getUTCDate().toString())
-    console.log(oneDAgo.getUTCFullYear().toString() + "-" + (oneDAgo.getUTCMonth() + 1).toString() + "-" + oneDAgo.getUTCDate().toString())
-    console.log(oneDAgo.getUTCFullYear().toString() + "-" + (oneDAgo.getUTCMonth() + 1).toString() + "-" + oneDAgo.getUTCDate().toString())
-    
-    this.PacTodayTotal = Math.ceil(this.PacTodayTotal)
-    this.PacYesterdayTotal = Math.ceil(this.PacYesterdayTotal)
-    this.PacDiffTodayTotal = Math.ceil(this.PacTodayTotal - this.PacYesterdayTotal)
-    this.PacThisMonthTotal = Math.ceil(this.PacThisMonthTotal)
-    this.PacLastMonthTotal = Math.ceil(this.PacLastMonthTotal)
-    this.PacDiffMonthTotal = Math.ceil(this.PacThisMonthTotal - this.PacLastMonthTotal)
-    console.log(this.PacDiffTodayTotalArr)
+      }
+    console.log(sixDAgo.getDate())
+    console.log(this.PacThisMonthTotalArr)
+    console.log(this.PacTodayTotalArr)
+    this.PacDiffTtD[this.PacDiffTtD.length-1]=this.PacTodayTotalArr[this.PacTodayTotalArr.length - 1] - this.PacTodayTotalArr[this.PacTodayTotalArr.length - 2]
+    this.PacDiffTtD[this.PacDiffTtD.length-2]=( this.PacDiffTtD[this.PacDiffTtD.length-1]/ this.PacTodayTotalArr[this.PacTodayTotalArr.length - 2]) * 100
+    this.pacDiffTtM[this.pacDiffTtM.length-1]=this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 1] - this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 2]
+    this.pacDiffTtM[this.pacDiffTtM.length-2]=( this.pacDiffTtM[this.pacDiffTtM.length-1] / this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 2]) * 100
+    this.PacDateD = [this.Gd[sixDAgo.getDay()],this.Gd[fiveDAgo.getDay()],this.Gd[fourDAgo.getDay()],this.Gd[threeDAgo.getDay()],this.Gd[twoDAgo.getDay()],this.Gd[oneDAgo.getDay()],this.Gd[d.getDay()]]
+    this.PacDateM = [this.Gm[d.getMonth()-6],this.Gm[d.getMonth()-5],this.Gm[d.getMonth()-4],this.Gm[d.getMonth()-3],this.Gm[d.getMonth()-2],this.Gm[d.getMonth()-1],this.Gm[d.getMonth()]]
     this.seriesDiffC = [
       {
-        name: "Vpv1_V",
+        name: "แรงดันไฟฟ้า",
         data: this.ToDayVpv
       },
       {
-        name: "Ipv1_A",
+        name: "กระแสไฟฟ้า",
         data: this.ToDayIpv
       },
       {
-        name: "Ppv1_W",
+        name: "กำลังไฟฟ้า",
         data: this.ToDayPpv
       }
-    ];
-    this.seriesVpv1 = [
-      {
-        name: "Vpv1_V",
-        data: this.ToDayVpv
-      },
-    ];
-    this.seriesIpv1 = [
-      {
-        name: "Ipv1_A",
-        data: this.ToDayIpv
-      },
-    ];
-    this.seriesPpv1 = [
-      {
-        name: "Ppv1_A",
-        data: this.ToDayPpv
-      },
     ];
     this.seriesPac = [
       {
@@ -470,47 +354,15 @@ export default {
       {
         name: 'Today',
         data: this.PacTodayTotalArr
-        }, 
-        {
-        name: 'YesterDay',
-        data: this.PacYesterdayTotalArr
-        }, 
-        {
-        name: 'DiffDay',
-        data: this.PacDiffTodayTotalArr
         }
     ];
-    this.seriesDiffM = [
-      Math.ceil((this.PacDiffMonthTotal / this.PacThisMonthTotal) * 100)
-    ];
-    this.seriesDiffD = [
-      Math.ceil((this.PacDiffTodayTotal / this.PacTodayTotal) * 100)
+    this.seriesBM = [
+      {
+        name: 'ThisMonth',
+        data: this.PacThisMonthTotalArr
+        }
     ];
     this.chartOptionsDiffC = {
-      ...this.chartOptions,
-      ...{
-        xaxis: {
-          categories: this.ToDayDate,
-        },
-      },
-    };
-    this.chartOptionsVpv1 = {
-      ...this.chartOptions,
-      ...{
-        xaxis: {
-          categories: this.ToDayDate,
-        },
-      },
-    };
-    this.chartOptionsIpv1 = {
-      ...this.chartOptions,
-      ...{
-        xaxis: {
-          categories: this.ToDayDate,
-        },
-      },
-    };
-    this.chartOptionsPpv1 = {
       ...this.chartOptions,
       ...{
         xaxis: {
@@ -538,25 +390,27 @@ export default {
       ...this.chartOptions,
       ...{
         xaxis: {
-          categories: this.PacTodayTotalArr,
+          categories: this.PacDateD,
+        },
+      },
+    };
+    this.chartOptionsBM = {
+      ...this.chartOptions,
+      ...{
+        xaxis: {
+          categories: this.PacDateM,
         },
       },
     };
   },
 
+  
+
 
 }
 </script>
 <style scoped>
-div.container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 0fr;
-  gap: 10px 10px;
-  grid-template-areas:
-    "a b c"
-    "d d d";
-  }
+
 
 div.container1 {
   display: grid;
@@ -569,28 +423,27 @@ div.container1 {
 
 div.container2 {
   display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 15px 15px;
+  grid-template-areas:
+    "aa bb cc dd";
+}
+div.container11{
+  display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   gap: 15px 15px;
   grid-template-areas:
-    "aa bb";
+    "bd bm";
+}
+div.BarD{
+  grid-area: bd;
+}
+div.BarM{
+  grid-area: bm;
 }
 
-div.A {
-  grid-area: a;
-}
-
-div.B {
-  grid-area: b;
-}
-
-div.C {
-  grid-area: c;
-}
-
-div.D {
-  grid-area: d;
-}
 
 div.E {
   grid-area: e;
@@ -605,6 +458,14 @@ div.AA {
 }
 
 div.BB {
-  grid-area: bb
+  grid-area: bb;
+}
+
+div.CC {
+  grid-area: cc;
+}
+
+div.DD {
+  grid-area: dd;
 }
 </style>

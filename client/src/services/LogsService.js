@@ -16,7 +16,5 @@ export default{
     delete (log) {
         return Api().delete('log/'+log.id,log)
     },
-    getarr (log) {
-        return Api().get('log/'+log.key,log)
-    }
+
 }
