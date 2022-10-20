@@ -2,11 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // logs
-import LogIndex from '@/components/Log/Index'
-import LogCreate from '@/components/Log/CreateLog'
-import LogEdit from '@/components/Log/EditLog'
-import LogShow from '@/components/Log/ShowLog'
-import DashboardD from '@/components/Log/DashboardD'
+import UserIndex from '@/components/Log/Index'
+import UserCreate from '@/components/Log/CreateUser'
+import UserEdit from '@/components/Log/EditUser'
+import UserShow from '@/components/Log/ShowUser'
 import DashboardS from '@/components/Log/DashboardS'
 
 Vue.use(Router)
@@ -14,33 +13,27 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/Logs',
-      name: 'Logs',
-      component: LogIndex
+      path: '/users',
+      name: 'users',
+      component: UserIndex
     }
     ,
     {
-      path: '/Log/create',
-      name: 'Log-create',
-      component: LogCreate
+      path: '/User/create',
+      name: 'User-create',
+      component: UserCreate
     }
     ,
     {
-      path: '/Log/edit',
-      name: 'Log-edit',
-      component: LogEdit
+      path: '/user/edit/:userId',
+      name: 'user-edit',
+      component: UserEdit
     }
     ,
     {
-      path: '/Log',
-      name: 'Log',
-      component: LogShow
-    }
-    ,
-    {
-      path: '/Log/DashboardD',
-      name: 'Dashboard',
-      component: DashboardD
+      path: '/user/:userId',
+      name: 'user',
+      component: UserShow
     }
     ,
     {

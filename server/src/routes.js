@@ -1,34 +1,34 @@
 const UserController = require('./controllers/UserController')
 module.exports = (app) => {
-    //pass
+    //pass creat Log
     app.post('/log',
         UserController.create
     )
-    //fail
+    //pass delete log
     app.delete('/log/:logId',
         UserController.remove
     )
-    //pass
+    //pass get all log
     app.get('/logs',
         UserController.index
     )
-    //pass
+    //pass creatreUser
     app.post('/user',
         UserController.createUser
     )
-    //pass
+    //pass update user
     app.put('/user/:userId',
         UserController.put
     )
-    //fail
+    //pass delete user by Id
     app.delete('/user/:userId',
         UserController.removeUser
     )
-    //pass
+    //pass get user by ID
     app.get('/user/:userId',
         UserController.show
     )
-    //pass
+    //pass get all user
     app.get('/users',
         UserController.indexUser
     )

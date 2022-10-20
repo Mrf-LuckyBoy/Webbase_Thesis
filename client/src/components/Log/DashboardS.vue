@@ -3,29 +3,29 @@
     <h1>หน้าติดตามการทำงานของอินเวอร์เตอร์</h1>
     <div class="container2">
       <div class="AA">
-        <h2>การผลิตไฟฟ้าในเดือนนี้เทียบกับเดือนที่แล้ว(W)</h2>
+        <h2>การผลิตไฟฟ้าในเดือนนี้เทียบกับเดือนที่แล้ว(Watt)</h2>
         <h3>{{pacDiffTtM[1]}} Watt <br><br>คิดเป็นเปอร์เซ็นต์<br>({{Math.ceil(pacDiffTtM[0])}}) %</h3>
       </div>
       <div class="BB">
-        <h2>การผลิตไฟฟ้าวันนี้เทียบกับเมื่อวาน(W)</h2>
+        <h2>การผลิตไฟฟ้าวันนี้เทียบกับเมื่อวาน(Watt)</h2>
         <h3>{{PacDiffTtD[1]}} Watt <br><br>คิดเป็นเปอร์เซ็นต์<br>({{Math.ceil(PacDiffTtD[0])}}) %</h3>
       </div>
       <div class="CC">
         <h2>การผลิตไฟฟ้าสะสมในวันนี้(Kwh)</h2>
-        <h3>{{EpvTd[EpvTd.length-1]}} Kwh</h3>
+        <h2><br>{{EpvTd[EpvTd.length-1]}} Kwh</h2>
       </div>
       <div class="DD">
         <h2>การผลิตไฟฟ้าสะสมทั้งหมด(Kwh)</h2>
-        <h3>{{EpvTt[EpvTt.length-1]}} Kwh</h3>
+        <h2><br>{{EpvTt[EpvTt.length-1]}} Kwh</h2>
       </div>
     </div>
     <div class="container11">
       <div class="BarD">
-        <h2>เปรียบเทียบการผลิตไฟฟ้าในรายสัปดาร์</h2>
+        <h2>เปรียบเทียบการผลิตไฟฟ้าในรายสัปดาห์(Watt)</h2>
         <apexchart type="bar" height="350" :options="chartOptionsBD" :series="seriesBD"></apexchart>
       </div>
       <div class="BarM">
-        <h2>เปรียบเทียบการผลิตไฟฟ้าเป็นรายเดือน</h2>
+        <h2>เปรียบเทียบการผลิตไฟฟ้าเป็นรายเดือน(Watt)</h2>
         <apexchart type="bar" height="350" :options="chartOptionsBM" :series="seriesBM"></apexchart>
       </div>
     </div>
@@ -42,6 +42,7 @@
     <div class="container">
       <div class="D">
         <h2>การติดตามค่า</h2>
+        <h3>แรงดันไฟ้า, กระแสไฟฟ้า, กำลังไฟฟ้า</h3>
         <apexchart type="line" height="350" :options="chartOptionsDiffC" :series="seriesDiffC"></apexchart>
       </div>
     </div>
@@ -191,13 +192,13 @@ export default {
       ],
       seriesPac: [
         {
-          name: "Pac_W",
+          name: "ไฟฟ้าผลิตได้(Watt)",
           data: []
         },
       ],
       seriesTd: [
         {
-          name: "Pac_W",
+          name: "ผลิตไฟฟ้าสะสมได้(Watt)",
           data: []
         },
       ],
@@ -232,25 +233,25 @@ export default {
       PacTodayTotalArr: [0, 0, 0, 0, 0, 0, 0],
       PacDateD: ["", "", "", "", "", "", ""],
       PacDateM: ["", "", "", "", "", "", ""],
-      Gm:["January","February","March","April","May","June","July","August","September","October","November","December"],
-      Gd:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+      Gm:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],
+      Gd:["วันอาทิตย์","วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์"]
     }
   },
   async created() {
-    const d = new Date();
-    const oneDAgo = new Date(); oneDAgo.setDate(oneDAgo.getDate() - 1)
-    const twoDAgo = new Date(); twoDAgo.setDate(twoDAgo.getDate() - 2)
-    const threeDAgo = new Date(); threeDAgo.setDate(threeDAgo.getDate() - 3)
-    const fourDAgo = new Date(); fourDAgo.setDate(fourDAgo.getDate() - 4)
-    const fiveDAgo = new Date(); fiveDAgo.setDate(fiveDAgo.getDate() - 5)
-    const sixDAgo = new Date(); sixDAgo.setDate(sixDAgo.getDate() - 6)
-    const sevenDAgo = new Date(); sevenDAgo.setDate(sevenDAgo.getDate() - 7)
+    let d = new Date();
+    let oneDAgo = new Date(); oneDAgo.setDate(oneDAgo.getDate() - 1)
+    let twoDAgo = new Date(); twoDAgo.setDate(twoDAgo.getDate() - 2)
+    let threeDAgo = new Date(); threeDAgo.setDate(threeDAgo.getDate() - 3)
+    let fourDAgo = new Date(); fourDAgo.setDate(fourDAgo.getDate() - 4)
+    let fiveDAgo = new Date(); fiveDAgo.setDate(fiveDAgo.getDate() - 5)
+    let sixDAgo = new Date(); sixDAgo.setDate(sixDAgo.getDate() - 6)
+    let sevenDAgo = new Date(); sevenDAgo.setDate(sevenDAgo.getDate() - 7)
 
-    const twoMAgo = new Date(); twoMAgo.setMonth(twoMAgo.getMonth() - 1)
-    const threeMAgo = new Date(); threeMAgo.setMonth(threeMAgo.getMonth() - 2)
-    const fourMAgo = new Date(); fourMAgo.setMonth(fourMAgo.getMonth() - 3)
-    const fiveMAgo = new Date(); fiveMAgo.setMonth(fiveMAgo.getMonth() - 4)
-    const sixMAgo = new Date(); sixMAgo.setMonth(sixMAgo.getMonth() - 5)
+    let twoMAgo = new Date(); twoMAgo.setMonth(twoMAgo.getMonth() - 1)
+    let threeMAgo = new Date(); threeMAgo.setMonth(threeMAgo.getMonth() - 2)
+    let fourMAgo = new Date(); fourMAgo.setMonth(fourMAgo.getMonth() - 3)
+    let fiveMAgo = new Date(); fiveMAgo.setMonth(fiveMAgo.getMonth() - 4)
+    let sixMAgo = new Date(); sixMAgo.setMonth(sixMAgo.getMonth() - 5)
     this.logs = (await LogService.index()).data
       for (let i = 0; i < this.logs.length; i++) {
       this.EpvTt.push(this.logs[i].Epv1_total_kWh);
@@ -340,13 +341,13 @@ export default {
     ];
     this.seriesPac = [
       {
-        name: "Pac_W",
+        name: "ไฟฟ้าผลิตได้(Watt)",
         data: this.ToDayPac
       },
     ];
     this.seriesTd = [
       {
-        name: "Epv1_today_kWh",
+        name: "ผลิตไฟฟ้าสะสมได้(Watt)",
         data: this.EpvTd
       },
     ];

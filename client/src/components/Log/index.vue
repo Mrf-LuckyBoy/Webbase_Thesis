@@ -1,31 +1,53 @@
 <template>
     <div>
-        <h1>Gat all logs</h1>
-        <div v-if="logs.length">
-            <div>จำนวนข้อมูล: {{logs.length}}</div>
-            <div>id: {{logs[0].id}}</div>
-            <div>feet: {{logs[0].distanceFt}}</div>
-            <div>inch: {{logs[0].distanceInch}}</div>
-            <div>mm: {{logs[0].distanceMm}}</div>
-            <div>cm: {{logs[0].distanceCm}}</div>
-            <div>timeC: {{logs[0].createdAt}}</div>
-            
+        <h1>Gat all User</h1>
+        <div>จำนวนผู้ใช้งาน: {{users.length}}</div>
+        <p><button v-on:click="navigateTo('/user/create')">สร้างผู้ใช้งาน</button></p>
+            <div v-for="user in users" v-bind:key="user.id">
+            <p>id: {{user.id}}</p>
+            <p>Username: {{user.Username}}</p>
+            <p>Password: {{user.Password}}</p>
+            <p>Fullname: {{user.fullname}}</p>
+            <p><button v-on:click="navigateTo('/user/'+user.id)">ดูข้อมูลผู้ใช้</button> 
+                <button v-on:click="navigateTo('/user/edit/'+user.id)">แก้ไขข้อมูลผู้ใช้</button>
+                <button v-on:click="deleteUser(user)">ลบข้อมูลผู้ใช้</button>
+            </p>
+            <hr>
         </div>
     </div>
 </template>
 <script>
 import LogService from '@/services/LogsService'
+import LogsService from '../../services/LogsService'
     //create array form json
     export default{
         data () {
             return {
-                logs: []
+                users: []
             }
         },
         async created () {
-            this.logs = (await LogService.index()).data
-            
+            this.users = (await LogService.indexUser()).data
         },
+        methods:{
+            navigateTo(route) {
+                this.$router.push(route)
+            },
+            async deleteUser (user) {
+                let result = confirm("ต้องการที่จะลบใช่ไหม")
+                if (result) {
+                    try {
+                        await LogsService.delete(user)
+                        this.refreshData()
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
+            },
+            async refreshData() {
+                this.users = (await LogsService.indexUser()).data
+            }
+        }
     }
 </script>
 <style scoped>

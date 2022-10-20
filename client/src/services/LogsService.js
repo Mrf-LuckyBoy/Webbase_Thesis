@@ -4,17 +4,21 @@ export default{
     index (search) {
         return Api().get('logs')
     },
-    show (logId){
-        return Api().get('log/'+logId)
+    indexUser (search) {
+        return Api().get('users')
     },
-    post (log){
-        return Api().post('log',log)
+    show (userId){
+        return Api().get('user/'+userId)
     },
-    put (log){
-        return Api().put('log/'+log.id,log)
+    post (user){
+        return Api().post('user',user)
     },
-    delete (log) {
-        return Api().delete('log/'+log.id,log)
+    put (user){
+        return Api().put('user/'+user.id,user)
     },
+    delete (user) {
+        return Api().delete('user/'+user.id,user)
+    }
+    
 
 }

@@ -1,7 +1,7 @@
 const {Log, User,sequelize} = require('../models')
 
 module.exports = {
-    // get all log //pass
+    // get all log 
     async index (req, res) {
         try{
             const logs = await Log.findAll()
@@ -12,7 +12,7 @@ module.exports = {
             })
         }
     },
-    // get all user //pass
+    // get all user 
     async indexUser (req, res) {
         try{
             const users = await User.findAll()
@@ -23,7 +23,7 @@ module.exports = {
             })
         }
     },
-    // create log // pass
+    // create log
     async create (req,res){
         try{
             const log = await Log.create(req.body)
@@ -34,7 +34,7 @@ module.exports = {
             })
         }
     },
-    // create user // pass
+    // create user 
     async createUser (req,res){
         try{
             const user = await User.create(req.body)
@@ -45,7 +45,7 @@ module.exports = {
             })
         }
     },
-    //edit user // didn't pass
+    //edit user 
     async put (req, res){
         try{
             await User.update(req.body,{
@@ -59,22 +59,21 @@ module.exports = {
             })
         }
     },
-    //delete log // didn't pass
+    //delete log 
     async remove (req,res) {
         try{
             const log = await Log.findOne({
+                
                 where: {
                     id: req.params.logId
                 }
             })
-
             if(!log){
                 return res.status(403).send({
                     error: 'The log info was incorrect 403 '
                 })
             }
-
-            await json_remove(log)
+            await log.destroy()
             res.send(log)
         } catch (err) {
             res.status(500).send({
@@ -82,7 +81,7 @@ module.exports = {
             })
         }
     },
-    // del user //didn't pass
+    // del user 
     async removeUser (req,res) {
         try{
             const user = await User.findOne({
@@ -96,8 +95,7 @@ module.exports = {
                     error: 'The user info was incorrect 403'
                 })
             }
-
-            await json_remove(user)
+            await user.destroy()
             res.send(user)
         } catch (err) {
             res.status(500).send({
@@ -105,7 +103,7 @@ module.exports = {
             })
         }
     },
-    //get user by id // pass
+    //get user by id 
     async show (req,res){
         try{
            const user = await User.findByPk(req.params.userId)
