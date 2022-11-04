@@ -1,4 +1,6 @@
 const UserController = require('./controllers/UserController')
+const UserAuthenController = require('./controllers/UserAuthenController')
+const Forecast = require('./controllers/Forecast')
 module.exports = (app) => {
     //pass creat Log
     app.post('/log',
@@ -32,4 +34,12 @@ module.exports = (app) => {
     app.get('/users',
         UserController.indexUser
     )
+
+    app.post('/login',
+    UserAuthenController.login
+    )
+
+    app.get('/forecast',
+    Forecast.forecast)
+    
 }

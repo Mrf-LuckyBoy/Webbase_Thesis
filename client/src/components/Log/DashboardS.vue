@@ -46,17 +46,26 @@
         <apexchart type="line" height="350" :options="chartOptionsDiffC" :series="seriesDiffC"></apexchart>
       </div>
     </div>
+    <div class="E">
+      <h2>พยากรณ์การผลิตกระแสไฟฟ้า</h2>
+      <apexchart type="line" height="350" :options="predictOp" :series="predictSeries"></apexchart>
+    </div>
   </div>
 
 </template>
 <script>
 import LogService from '@/services/LogsService'
-
+import ForecastService from '@/services/ForecastService'
 export default {
   name: 'hello',
   data: function () {
     return {
-      
+      predictOp: {
+        xaxis: {
+          categories: ["5นาที","10นาที","15นาที","20นาที","25นาที","30นาที","35นาที","40นาที","45นาที","50นาที","55นาที","60นาที"]
+        },
+        colors: ['#c92e2e']
+      },
       chartOptionsPac: {
         xaxis: {
           type: "datetime",
@@ -111,7 +120,6 @@ export default {
             }
           },
           {
-            seriesName: 'Income',
             opposite: true,
             axisTicks: {
               show: true,
@@ -133,7 +141,6 @@ export default {
             },
           },
           {
-            seriesName: 'Revenue',
             opposite: true,
             axisTicks: {
               show: true,
@@ -204,17 +211,22 @@ export default {
       ],
       seriesBD: [
         {
-          name: 'Today',
+          name: 'Watt',
           data: []
         }
       ],
       seriesBM: [
         {
-          name: 'ThisMonth',
+          name: 'Watt',
           data: []
         }
       ],
-
+      predictSeries: [
+        {
+          name: 'predict',
+          data: []
+        }
+      ],
       seriesDiffM: [],
       seriesDiffD: [],
       ToDayDate: [],
@@ -224,6 +236,9 @@ export default {
       ToDayPac: [],
       EpvTd: [],
       EpvTt: [],
+      PrePac: [],
+      AlP:[],
+      pAc:[],
       //card
       PacDiffTtD:[0 , 0],
       pacDiffTtM:[0 , 0],
@@ -234,7 +249,8 @@ export default {
       PacDateD: ["", "", "", "", "", "", ""],
       PacDateM: ["", "", "", "", "", "", ""],
       Gm:["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],
-      Gd:["วันอาทิตย์","วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์"]
+      Gd:["วันอาทิตย์","วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์"],
+      pdt:["5นาที","10นาที","15นาที","20นาที","25นาที","30นาที","35นาที","40นาที","45นาที","50นาที","55นาที","60นาที"],
     }
   },
   async created() {
@@ -253,8 +269,11 @@ export default {
     let fiveMAgo = new Date(); fiveMAgo.setMonth(fiveMAgo.getMonth() - 4)
     let sixMAgo = new Date(); sixMAgo.setMonth(sixMAgo.getMonth() - 5)
     this.logs = (await LogService.index()).data
+    this.ford = (await ForecastService.forecast()).data
+    
       for (let i = 0; i < this.logs.length; i++) {
       this.EpvTt.push(this.logs[i].Epv1_total_kWh);
+      this.AlP.push(Math.ceil(this.logs[i].Pac_W))
       //this year
       if (d.getFullYear().toString() == this.logs[i].updatedAt.slice(0, 4)) {
         //sumPacThisMonth
@@ -316,9 +335,20 @@ export default {
       }
 
       }
+      //array for predect
+      /*ARIMAPromise.then(ARIMA => {
+      const arima = new ARIMA({ p: 2, d: 2, q: 1, P: 0, D: 0, Q: 0, S: 13, verbose: false }).train(this.AlP.slice(-955))
+      const [pred, errors] = arima.predict(10)
+      })
+      */
+
+      
+
+    
     console.log(sixDAgo.getDate())
     console.log(this.PacThisMonthTotalArr)
     console.log(this.PacTodayTotalArr)
+    console.log(this.AlP.slice(-955))
     this.PacDiffTtD[this.PacDiffTtD.length-1]=this.PacTodayTotalArr[this.PacTodayTotalArr.length - 1] - this.PacTodayTotalArr[this.PacTodayTotalArr.length - 2]
     this.PacDiffTtD[this.PacDiffTtD.length-2]=( this.PacDiffTtD[this.PacDiffTtD.length-1]/ this.PacTodayTotalArr[this.PacTodayTotalArr.length - 2]) * 100
     this.pacDiffTtM[this.pacDiffTtM.length-1]=this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 1] - this.PacThisMonthTotalArr[this.PacThisMonthTotalArr.length - 2]
@@ -353,16 +383,22 @@ export default {
     ];
     this.seriesBD = [
       {
-        name: 'Today',
+        name: 'Watt',
         data: this.PacTodayTotalArr
         }
     ];
     this.seriesBM = [
       {
-        name: 'ThisMonth',
+        name: 'Watt',
         data: this.PacThisMonthTotalArr
         }
     ];
+    this.predictSeries = [
+      {
+        name: 'predict',
+        data: this.ford
+      }
+    ]
     this.chartOptionsDiffC = {
       ...this.chartOptions,
       ...{

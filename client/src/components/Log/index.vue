@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Gat all User</h1>
+        <h1>หน้าจัดการการเพิ่มลบแก้ไขข้อมูลผู้ใช้งาน</h1>
         <div>จำนวนผู้ใช้งาน: {{users.length}}</div>
         <p><button v-on:click="navigateTo('/user/create')">สร้างผู้ใช้งาน</button></p>
             <div v-for="user in users" v-bind:key="user.id">
