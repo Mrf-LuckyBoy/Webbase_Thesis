@@ -1,5 +1,5 @@
-const {Log, User,sequelize} = require('../models')
-
+// const {Log, User,sequelize} = require('../models')
+const {Log} = require('../models')
 module.exports = {
     // get all log 
     async index (req, res) {

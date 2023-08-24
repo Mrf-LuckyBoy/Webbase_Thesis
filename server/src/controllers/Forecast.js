@@ -1,6 +1,5 @@
 const ARIMA = require('arima')
-const {Log, User,sequelize} = require('../models')
-const config = require('../config/config')
+const {Log} = require('../models')
 
 module.exports = {
     async forecast(req, res){

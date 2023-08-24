@@ -9,7 +9,7 @@ module.exports = {
             storage: './sonicLog.sqlite',
         },
     },
-    authentication: {
-        jwtSecret: "test"
-    }
+    // authentication: {
+    //     jwtSecret: "test"
+    // }
 }
